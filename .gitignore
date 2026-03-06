@@ -1,0 +1,12 @@
+*.pyc
+*.pyo
+__pycache__/
+
+# Raw data files (too large for GitHub — ~58MB and ~61MB; see README for download links)
+data/raw/*.csv
+data/raw/*.xlsx
+
+# R session artifacts
+.Rhistory
+.RData
+.Rproj.user/

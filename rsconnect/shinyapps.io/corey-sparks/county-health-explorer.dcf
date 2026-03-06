@@ -1,0 +1,10 @@
+name: county-health-explorer
+title:
+username: corey-sparks
+account: corey-sparks
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 16832707
+bundleId: 11672537
+url: https://corey-sparks.shinyapps.io/county-health-explorer/
+version: 1

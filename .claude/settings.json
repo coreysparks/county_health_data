@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(R --version)",
+      "Bash(R --quiet:*)",
+      "Bash(Rscript prep_data.R)"
+    ]
+  }
+}
