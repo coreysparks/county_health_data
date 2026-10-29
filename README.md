@@ -80,7 +80,7 @@ R 4.x with the following packages:
 
 ```r
 install.packages(c(
-  "shiny", "bslib", "leaflet", "sf", "dplyr", "arrow", "tigris",
+  "shiny", "bslib", "leaflet", "sf", "dplyr", "arrow",
   "classInt", "RColorBrewer", "sfdep", "spdep", "DT", "shinycssloaders"
 ))
 ```
@@ -97,7 +97,7 @@ source("prep_data.R")
 shiny::runApp("app.R")
 ```
 
-County shapefiles are downloaded automatically via `tigris` on first run and cached locally.
+County and state boundaries are read from the bundled `data/processed/county_state_geometries.rds` (2022 cartographic boundary files, 1:20m, territories removed). To rebuild it, install `tigris` and run `tigris::counties()` / `tigris::states()` with `cb = TRUE, resolution = "20m", year = 2022`, drop the territory FIPS codes (60, 66, 69, 72, 78), transform to EPSG:4326, and `saveRDS()` a list with elements `counties` and `states`.
 
 ---
 
@@ -111,16 +111,10 @@ County shapefiles are downloaded automatically via `tigris` on first run and cac
 
 ## Deployment
 
-To publish to [shinyapps.io](https://www.shinyapps.io):
+The app is deployed on Posit Connect Cloud:
+https://connect.posit.cloud/coreysparks/content/01a18972-3b02-7b0b-8610-ab1f1c14eb3d
 
-```r
-install.packages("rsconnect")
-rsconnect::deployApp(
-  appDir   = ".",
-  appFiles = c("app.R", "data/processed/county_health_merged.parquet"),
-  appName  = "county-health-explorer"
-)
-```
+It is published with the [Posit Publisher](https://docs.posit.co/publisher/) VS Code extension. The configuration lives in `.posit/publish/`, package dependencies are pinned in `renv.lock`, and the bundle includes `app.R` plus the two files in `data/processed/`. To update the deployment, open the Publisher panel, select the deployment, and click **Republish**.
 
 ---
 
