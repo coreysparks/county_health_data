@@ -4,7 +4,6 @@ library(leaflet)
 library(sf)
 library(dplyr)
 library(arrow)
-library(tigris)
 library(classInt)
 library(RColorBrewer)
 library(sfdep)
@@ -16,8 +15,6 @@ library(shinycssloaders)
 dataTableOutput <- DT::dataTableOutput
 renderDataTable <- DT::renderDataTable
 
-options(tigris_use_cache = TRUE)
-
 # ---------------------------------------------------------------------------
 # Data loaders
 # ---------------------------------------------------------------------------
@@ -27,16 +24,10 @@ load_health <- function() {
   hd
 }
 
+# Boundaries are precomputed from tigris (2022 cartographic boundary files, 1:20m,
+# territories removed, EPSG:4326) so the deployed app needs no network access.
 load_geo <- function() {
-  skip <- c("60", "66", "69", "72", "78")   # territories: AS, GU, MP, PR, VI
-  co <- tigris::counties(cb = TRUE, resolution = "20m", year = 2022, progress_bar = FALSE)
-  st <- tigris::states( cb = TRUE, resolution = "20m", year = 2022, progress_bar = FALSE)
-  co <- co[!co$STATEFP %in% skip, ]
-  st <- st[!st$STATEFP %in% skip, ]
-  list(
-    counties = sf::st_transform(co, 4326),
-    states   = sf::st_transform(st, 4326)
-  )
+  readRDS("data/processed/county_state_geometries.rds")
 }
 
 # ---------------------------------------------------------------------------
@@ -318,7 +309,7 @@ server <- function(input, output, session) {
   # ========================================================================
   output$choro_map <- renderLeaflet({
     leaflet(options = leafletOptions(preferCanvas = TRUE)) |>
-      addProviderTiles("CartoDB.Positron") |>
+      addProviderTiles("Esri.WorldGrayCanvas") |>
       setView(lng = -96, lat = 38, zoom = 4)
   })
 
@@ -424,7 +415,7 @@ server <- function(input, output, session) {
 
   output$lisa_map <- renderLeaflet({
     leaflet(options = leafletOptions(preferCanvas = TRUE)) |>
-      addProviderTiles("CartoDB.Positron") |>
+      addProviderTiles("Esri.WorldGrayCanvas") |>
       setView(lng = -96, lat = 38, zoom = 4)
   })
 

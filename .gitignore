@@ -10,3 +10,6 @@ data/raw/*.xlsx
 .Rhistory
 .RData
 .Rproj.user/
+
+# Python virtual environment
+.venv/
